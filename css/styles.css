@@ -54,21 +54,73 @@ body {
 
 /* HEADER: fondo Airbnb, letras blancas */
 .main-header {
-    /* El blanco solo ocupa el 30% final, el color principal predomina */
-    background: linear-gradient(90deg, #FF5A5F 0%, #FF5A5F 70%, #fff 100%);
-    color: #fff !important;
-    padding: 2.5em 0 2em 0;
-    margin-bottom: 3.5em; /* Ajusta este valor según prefieras la separación */
+  background: linear-gradient(90deg, #FF5A5F, #FFB6C1); /* Degradado de Airbnb */
+  color: white; /* Color del texto */
+  padding: 50px 0; /* Espaciado interno */
+  margin: 0; /* Elimina márgenes externos */
+  border-bottom: none; /* Asegúrate de que no haya bordes */
 }
+
+/* Contenedor del header */
+.main-header {
+  position: relative; /* Permite posicionar el logo de forma absoluta */
+  text-align: center; /* Centra el título */
+  padding: 50px 0; /* Espaciado interno */
+}
+
+/* Contenedor del logo y título */
 .header-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 2.5em;
-    max-width: 1100px;
-    margin: 0 auto;
-    flex-wrap: wrap;
+  display: inline-flex; /* Alinea el logo y el título horizontalmente */
+  align-items: center; /* Centra verticalmente el contenido */
+  gap: 15px; /* Espaciado entre el logo y el título */
 }
+
+/* Estilo para el logo */
+#logo {
+  width: 60px; /* Tamaño del logo */
+  height: auto; /* Mantiene la proporción del logo */
+}
+
+/* Estilo para el título principal */
+.main-title {
+  font-size: 3.5rem; /* Tamaño del título */
+  color: #FF5A5F; /* Color del título */
+  margin: 0; /* Elimina márgenes */
+}
+
+/* Centra el contenedor en la página */
+.main-header {
+  text-align: center; /* Centra el contenido horizontalmente */
+}
+
+/* Ajusta el subtítulo */
+.main-subtitle {
+  margin: 0; /* Elimina márgenes */
+  font-size: 1.2rem; /* Ajusta el tamaño del subtítulo */
+}
+
+/* Ajusta el logo */
+#logo {
+  margin-bottom: 20px; /* Espaciado entre el logo y el título */
+}
+
+/* Ajusta el logo */
+#logo {
+  margin: 0; /* Elimina márgenes */
+  padding: 0; /* Elimina padding */
+}
+
+/* Ajusta el título y subtítulo */
+.main-title {
+  margin: 0; /* Elimina márgenes */
+  font-size: 3.5rem; /* Agranda el tamaño del título */
+}
+
+.main-subtitle {
+  margin: 0; /* Elimina márgenes */
+  font-size: 1.2rem; /* Ajusta el tamaño del subtítulo */
+}
+
 #logo .logo-svg {
     max-width: 340px;
     width: 100%;
@@ -634,4 +686,87 @@ footer {
 
 #bot-dialog-step1 p:nth-of-type(2) {
     margin-top: 0 !important; /* Elimina margen superior de la pregunta */
+}
+
+/* Estilo para el título "Mediaris" */
+#titulo {
+  text-align: center; /* Centra el título */
+  font-size: 3.5rem; /* Agranda el tamaño del título */
+  background: linear-gradient(90deg, #FF5A5F, #FFB6C1); /* Degradado de Airbnb */
+  color: white; /* Color del texto */
+  padding: 50px 0; /* Espaciado interno */
+  margin: 0; /* Elimina márgenes externos */
+}
+
+/* Elimina el espacio en blanco entre las secciones */
+#titulo + #somos-mediaris {
+  margin-top: -10px; /* Ajusta el espacio entre las secciones */
+}
+
+/* Estilo para la sección "Somos Mediaris" */
+#somos-mediaris {
+  margin: 0; /* Elimina márgenes externos */
+  padding: 20px; /* Ajusta el espaciado interno si es necesario */
+  background: #fff; /* Fondo blanco para contraste */
+}
+
+/* Estilo para el header */
+header {
+  background: linear-gradient(90deg, #FF5A5F, #FFB6C1); /* Degradado de Airbnb */
+  color: white; /* Color del texto */
+  padding: 50px 0; /* Espaciado interno */
+  margin: 0; /* Elimina márgenes externos */
+  border-bottom: none; /* Asegúrate de que no haya bordes */
+}
+
+/* Elimina márgenes y padding globales */
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
+/* Ajusta el espacio entre el header y la siguiente sección */
+header + section {
+  margin-top: 0; /* Elimina cualquier margen entre el header y la siguiente sección */
+}
+
+/* Estilo para la nota aclaratoria */
+.nota-aclaratoria {
+  text-align: center; /* Centra el texto */
+  color: #FF5A5F; /* Color de Airbnb */
+  font-size: 0.9rem; /* Tamaño de letra más pequeño */
+  margin: 20px 0; /* Espaciado superior e inferior */
+}
+
+/* Estilo para el enlace de la nota aclaratoria */
+.aclaracion-link {
+  text-align: center; /* Centra el texto */
+  display: block; /* Hace que el enlace ocupe toda la línea */
+  color: #FF5A5F; /* Color de Airbnb */
+  font-size: 0.9rem; /* Tamaño de letra más pequeño */
+  margin: 20px auto; /* Centra el enlace verticalmente */
+  text-decoration: none; /* Elimina el subrayado */
+}
+
+/* Elimina el botón de iniciar conversación */
+.bot-link {
+  display: none; /* Oculta el botón */
+}
+
+/* Estilo para la nota de derechos reservados */
+.footer-derechos {
+  text-align: center; /* Centra el texto */
+  font-size: 0.8rem; /* Tamaño de letra más pequeño */
+  color: #666; /* Color gris para contraste */
+  margin: 20px 0; /* Espaciado superior e inferior */
+}
+
+/* Estilo para el texto descriptivo alineado con el título */
+.texto-descriptivo {
+  color: #484848; /* Color gris oscuro usado por Airbnb */
+  font-size: 1rem; /* Tamaño de letra estándar */
+  line-height: 1.5; /* Espaciado entre líneas */
+  text-align: left; /* Alinea el texto a la izquierda */
+  margin-left: 40px; /* Ajusta el margen izquierdo para que coincida con el título */
+  margin-right: auto; /* Mantiene el margen derecho automático */
 }
