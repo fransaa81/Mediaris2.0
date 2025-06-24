@@ -770,3 +770,83 @@ header + section {
   margin-left: 40px; /* Ajusta el margen izquierdo para que coincida con el título */
   margin-right: auto; /* Mantiene el margen derecho automático */
 }
+
+/* Ajustes generales para móviles */
+@media screen and (max-width: 768px) {
+  body {
+    font-size: 14px; /* Reduce el tamaño de fuente para pantallas pequeñas */
+    padding: 0;
+    margin: 0;
+  }
+
+  .main-header {
+    padding: 20px; /* Reduce el espaciado interno */
+  }
+
+  #logo {
+    width: 40px; /* Ajusta el tamaño del logo */
+    height: auto;
+  }
+
+  .main-title {
+    font-size: 2rem; /* Reduce el tamaño del título */
+  }
+
+  .main-nav ul {
+    display: flex;
+    flex-direction: column; /* Coloca los enlaces en una columna */
+    align-items: center;
+    padding: 0;
+  }
+
+  .main-nav ul li {
+    margin: 10px 0; /* Espaciado entre enlaces */
+  }
+
+  .mediaciones-tipos-grid {
+    display: flex;
+    flex-direction: column; /* Coloca las tarjetas en una columna */
+    gap: 15px; /* Espaciado entre tarjetas */
+  }
+
+  .tipo-mediacion-card {
+    padding: 15px; /* Ajusta el espaciado interno */
+    font-size: 0.9rem; /* Reduce el tamaño de texto */
+  }
+
+  .modal-content {
+    width: 90%; /* Ajusta el ancho del modal */
+    margin: auto; /* Centra el modal */
+  }
+
+  .modal-img {
+    width: 100%; /* Ajusta la imagen al ancho del modal */
+    height: auto;
+  }
+
+  footer {
+    text-align: center; /* Centra el texto del footer */
+    padding: 10px;
+  }
+
+  #modo-nocturno-btn {
+    top: 10px; /* Ajusta la posición del botón */
+    right: 10px;
+    padding: 8px 12px; /* Reduce el tamaño del botón */
+  }
+}
+
+/* Ajustes para pantallas muy pequeñas (teléfonos) */
+@media screen and (max-width: 480px) {
+  .main-title {
+    font-size: 1.8rem; /* Reduce aún más el tamaño del título */
+  }
+
+  .tipo-mediacion-card {
+    font-size: 0.8rem; /* Ajusta el tamaño de texto */
+  }
+
+  .modal-content {
+    padding: 10px; /* Reduce el espaciado interno del modal */
+  }
+}
