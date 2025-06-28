@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Lato:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* Centra los párrafos de la sección de contacto */
+        #formulario-contacto .section-header p.justificado {
+          text-align: center;
+        }
+    </style>
 </head>
 <body>
     <nav class="main-nav">
@@ -18,7 +24,7 @@
     </nav>
     <header class="main-header">
   <div class="header-content">
-    <div id="logo">
+    <div id="logo" style="margin-left: -70px;">
       <svg width="60" height="60" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-svg">
         <ellipse cx="70" cy="60" rx="44" ry="36" stroke="#fff" stroke-width="12" fill="none"></ellipse>
         <ellipse cx="120" cy="60" rx="44" ry="36" stroke="#fff" stroke-width="12" fill="none" transform="rotate(15 120 60)"></ellipse>
@@ -95,19 +101,17 @@
       <section id="formulario-contacto" class="section contacto-section">
         <div class="section-header">
             <h2>Contacto</h2>
-            <p class="justificado">¿Tienes dudas o quieres iniciar un proceso de mediación? Completa el siguiente formulario y nos pondremos en contacto contigo a la brevedad.</p>
+            <p class="justificado">¿Tienes dudas o quieres iniciar un proceso de mediación?</p>
+            <p class="justificado">Completa el siguiente formulario y nos pondremos en contacto contigo a la brevedad.</p>
             <form action="#" method="post" class="contact-form">
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" required>
-                
-                <label for="correo">Correo electrónico:</label>
-                <input type="email" id="correo" name="correo" required>
-                
-                <label for="mensaje">Mensaje:</label>
-                <textarea id="mensaje" name="mensaje" required></textarea>
-                
-                <button type="submit">Enviar</button>
-            </form>
+      <label for="correo">Correo electrónico:</label>
+      <input type="email" id="correo" name="correo" required="">
+
+      <label for="mensaje">Mensaje:</label>
+      <textarea id="mensaje" name="mensaje" required=""></textarea>
+
+      <button type="submit">Enviar</button>
+    </form>
         </div>
     </section>
     </main>
