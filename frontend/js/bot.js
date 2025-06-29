@@ -103,32 +103,33 @@ function manejarPasoBot(texto) {
   } else if (botStep === 3) {
     // Una vez que se han contestado las preguntas por defecto, se inicia la conversación
     setTimeout(() => {
-      iniciarAssistant(userName, userTopic);
+      iniciarAgenteOpenia(userName, userTopic);
       botStep = 4;
     }, 400);
   }
 }
 
-function iniciarAssistant(userName, userTopic) {
-    agregarMensajeBot("Conectando con el asistent...");
+function iniciarAgenteOpenia(userName, userTopic) {
+  agregarMensajeBot("Conectando con el agente IA...");
   
-    fetch('/start_assistant', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ userName: userName, userTopic: userTopic })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.status === 'success') {
-            let resp = data.data.response || "El asistent ya está en línea. Continúa la conversación.";
-            agregarMensajeBot(resp);
-        } else {
-            agregarMensajeBot("Error al conectar con el asistent: " + data.message);
-        }
-    })
-    .catch(error => {
-        agregarMensajeBot("Error al conectar con el asistent: " + error);
-    });
+  fetch('/start_agent', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ userName: userName, userTopic: userTopic })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === 'success') {
+      // Se espera que la API devuelva un mensaje en data.data.response
+      let responseMessage = data.data.response || "El agente ya está en línea. Continúa la conversación.";
+      agregarMensajeBot(responseMessage);
+    } else {
+      agregarMensajeBot("Error al conectar con el agente: " + data.message);
+    }
+  })
+  .catch(error => {
+    agregarMensajeBot("Error al conectar con el agente: " + error);
+  });
 }

@@ -19,6 +19,7 @@ body {
     padding: 0;
     background: var(--airbnb-light);
     color: var(--airbnb-dark);
+    border: 5px solid red !important;
 }
 
 .justificado {
