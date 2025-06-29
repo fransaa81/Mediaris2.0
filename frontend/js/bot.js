@@ -1,6 +1,9 @@
 let botStep = 0;
-let userName = "";
-let userTema = "";
+let userName = "Usuario"; // Nombre por defecto
+let userTopic = "consulta general"; // Tema por defecto
+let userDetails = "";
+let additionalInfo = "";
+let conversationStarted = false;
 
 function abrirBotDialog() {
   document.getElementById('bot-dialog-modal').style.display = 'flex';
@@ -18,14 +21,15 @@ function cerrarBotDialog() {
 }
 
 function iniciarChatBot() {
-  botStep = 0;
-  userName = "";
-  userTema = "";
+  conversationStarted = false;
   const chat = document.getElementById('bot-chat-window');
   chat.innerHTML = '';
-  agregarMensajeBot("Bienvenido a Mediaris. Por favor, indícanos tu nombre y apellido.");
+  agregarMensajeBot("Conectando con el asistente de mediación...");
   document.getElementById('bot-input').value = '';
   document.getElementById('bot-input').focus();
+  
+  // Conectar directamente con el asistente
+  conectarConAsistente();
 }
 
 function agregarMensajeBot(texto) {
@@ -46,90 +50,151 @@ function agregarMensajeUsuario(texto) {
   chat.scrollTop = chat.scrollHeight;
 }
 
+function procesarRespuestaUsuario(input) {
+  agregarMensajeUsuario(input);
+  
+  // Si la conversación ya está activa, enviar mensaje al asistente
+  if (conversationStarted) {
+    enviarMensajeAlAsistente(input);
+  }
+}
+
+// Función para enviar mensajes al asistente
+async function enviarMensajeAlAsistente(mensaje) {
+  try {
+    agregarMensajeBot("Procesando tu mensaje...");
+    
+    const response = await fetch('http://127.0.0.1:5000/send_message', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: mensaje
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    // Remover el mensaje "Procesando..."
+    const chatWindow = document.getElementById('bot-chat-window');
+    const lastMessage = chatWindow.lastElementChild;
+    if (lastMessage && lastMessage.textContent === "Procesando tu mensaje...") {
+      chatWindow.removeChild(lastMessage);
+    }
+
+    if (data.status === 'success') {
+      agregarMensajeBot(data.data.response);
+    } else {
+      agregarMensajeBot("Error: " + data.message);
+    }
+  } catch (error) {
+    console.error('Error al enviar mensaje:', error);
+    agregarMensajeBot("Error al enviar mensaje: " + error.message);
+  }
+}
+
+// Función para conectar con el asistente de OpenAI
+async function conectarConAsistente() {
+  try {
+    console.log('Conectando directamente con el asistente...');
+
+    const response = await fetch('http://127.0.0.1:5000/start_assistant', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userName: userName,
+        userTopic: userTopic
+      })
+    });
+
+    console.log('Respuesta del servidor:', response);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('Datos recibidos:', data);
+
+    // Remover el mensaje "Conectando..."
+    const chatWindow = document.getElementById('bot-chat-window');
+    const lastMessage = chatWindow.lastElementChild;
+    if (lastMessage && lastMessage.textContent === "Conectando con el asistente de mediación...") {
+      chatWindow.removeChild(lastMessage);
+    }
+
+    if (data.status === 'success') {
+      agregarMensajeBot(data.data.response);
+      // Marcar que la conversación con el asistente ha comenzado
+      conversationStarted = true;
+    } else {
+      agregarMensajeBot("Error: " + data.message);
+    }
+  } catch (error) {
+    console.error('Error al conectar con el agente:', error);
+    agregarMensajeBot("Error al conectar con el agente: " + error.message);
+  }
+}
+
+// Event listeners
 document.addEventListener('DOMContentLoaded', function() {
-  var abrirBot = document.getElementById('abrir-bot-dialogo');
-  if (abrirBot) {
-    abrirBot.addEventListener('click', function(e) {
+  const inputForm = document.getElementById('bot-input-form');
+  const userInput = document.getElementById('bot-input');
+  const closeBtn = document.getElementById('cerrar-bot-dialog');
+  const openBotBtn = document.getElementById('abrir-bot-dialogo');
+
+  // Event listener para el formulario de input
+  if (inputForm) {
+    inputForm.addEventListener('submit', function(e) {
       e.preventDefault();
-      abrirBotDialog();
+      const input = userInput.value.trim();
+      if (input) {
+        procesarRespuestaUsuario(input);
+        userInput.value = '';
+      }
     });
   }
 
-  // Cerrar con la X
-  var cerrarBot = document.getElementById('cerrar-bot-dialog');
-  if (cerrarBot) {
-    cerrarBot.addEventListener('click', function(e) {
+  // Event listener para cerrar el diálogo
+  if (closeBtn) {
+    closeBtn.addEventListener('click', function(e) {
       e.preventDefault();
       cerrarBotDialog();
     });
   }
 
-  // Manejo del formulario de chat
-  const botForm = document.getElementById('bot-input-form');
-  if (botForm) {
-    botForm.addEventListener('submit', function(e) {
+  // Event listener para abrir el diálogo
+  if (openBotBtn) {
+    openBotBtn.addEventListener('click', function(e) {
       e.preventDefault();
-      const input = document.getElementById('bot-input');
-      const texto = input.value.trim();
-      if (!texto) return;
-      agregarMensajeUsuario(texto);
-      input.value = '';
-      manejarPasoBot(texto);
+      abrirBotDialog();
     });
   }
-});
 
-function manejarPasoBot(texto) {
-  if (botStep === 0) {
-    // El usuario responde su nombre.
-    userName = texto;
-    setTimeout(() => {
-      agregarMensajeBot("¿Cuéntanos qué tema te gustaría conversar?");
-      botStep = 1;
-    }, 400);
-  } else if (botStep === 1) {
-    // El usuario responde el tema.
-    userTopic = texto;
-    setTimeout(() => {
-      agregarMensajeBot("¿Quieres agregar algún detalle o mensaje adicional sobre tu situación?");
-      botStep = 2;
-    }, 400);
-  } else if (botStep === 2) {
-    // El usuario responde los detalles.
-    setTimeout(() => {
-      agregarMensajeBot("Se comunicará con ud un especialista en el tema para abordar.");
-      botStep = 3;
-    }, 400);
-  } else if (botStep === 3) {
-    // Una vez que se han contestado las preguntas por defecto, se inicia la conversación
-    setTimeout(() => {
-      iniciarAgenteOpenia(userName, userTopic);
-      botStep = 4;
-    }, 400);
+  // Event listener para cerrar al hacer clic fuera del modal
+  const botModal = document.getElementById('bot-dialog-modal');
+  if (botModal) {
+    botModal.addEventListener('click', function(e) {
+      if (e.target === botModal) {
+        cerrarBotDialog();
+      }
+    });
   }
-}
 
-function iniciarAgenteOpenia(userName, userTopic) {
-  agregarMensajeBot("Conectando con el agente IA...");
-  
-  fetch('/start_agent', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ userName: userName, userTopic: userTopic })
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.status === 'success') {
-      // Se espera que la API devuelva un mensaje en data.data.response
-      let responseMessage = data.data.response || "El agente ya está en línea. Continúa la conversación.";
-      agregarMensajeBot(responseMessage);
-    } else {
-      agregarMensajeBot("Error al conectar con el agente: " + data.message);
+  // Event listener para cerrar con la tecla Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      const modal = document.getElementById('bot-dialog-modal');
+      if (modal && modal.style.display !== 'none') {
+        cerrarBotDialog();
+      }
     }
-  })
-  .catch(error => {
-    agregarMensajeBot("Error al conectar con el agente: " + error);
   });
-}
+});

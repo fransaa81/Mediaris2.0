@@ -24,12 +24,6 @@
     </nav>
     <header class="main-header">
   <div class="header-content">
-    <div id="logo" style="margin-left: -70px;">
-      <svg width="60" height="60" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-svg">
-        <ellipse cx="70" cy="60" rx="44" ry="36" stroke="#fff" stroke-width="12" fill="none"></ellipse>
-        <ellipse cx="120" cy="60" rx="44" ry="36" stroke="#fff" stroke-width="12" fill="none" transform="rotate(15 120 60)"></ellipse>
-      </svg>
-    </div>
     <h1 class="main-title cursiva-mayus">MEDIARIS</h1>
   </div>
 </header>
@@ -45,22 +39,30 @@
                     <div class="tipo-mediacion-card" onclick="abrirModal('modal-familia')">
                         <span class="icono"><i class="fa-solid fa-scale-balanced"></i></span>
                         <span>Conflictos familiares</span>
-                        <small>Ayudamos a familias a superar diferencias y fortalecer vínculos, promoviendo el entendimiento y la armonía en el hogar.</small>
+                        <p class="justificado">
+                            Ayudamos a familias a superar diferencias y fortalecer vínculos, promoviendo el entendimiento y la armonía en el hogar.
+                        </p>
                     </div>
                     <div class="tipo-mediacion-card" onclick="abrirModal('modal-amistad')">
                         <span class="icono"><i class="fa-solid fa-user-group"></i></span>
                         <span>Conflictos entre amistades</span>
-                        <small>Facilitamos la comunicación entre amigos para resolver malentendidos y restaurar relaciones valiosas.</small>
+                        <p class="justificado">
+                            Facilitamos la comunicación entre amigos para resolver malentendidos y restaurar relaciones valiosas.
+                        </p>
                     </div>
                     <div class="tipo-mediacion-card" onclick="abrirModal('modal-pareja')">
                         <span class="icono"><i class="fa-solid fa-venus-mars"></i></span>
                         <span>Conflictos de pareja</span>
-                        <small>Ofrecemos un espacio neutral para que las parejas puedan dialogar y encontrar soluciones a sus diferencias.</small>
+                        <p class="justificado">
+                            Ofrecemos un espacio neutral para que las parejas puedan dialogar y encontrar soluciones a sus diferencias.
+                        </p>
                     </div>
                     <div class="tipo-mediacion-card" onclick="abrirModal('modal-grupal')">
                         <span class="icono"><i class="fa-solid fa-people-group"></i></span>
                         <span>Conflictos grupales</span>
-                        <small>Intervenimos en grupos, equipos de trabajo o comunidades para mejorar la convivencia y la colaboración.</small>
+                        <p class="justificado">
+                            Intervenimos en grupos, equipos de trabajo o comunidades para mejorar la convivencia y la colaboración.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -156,37 +158,40 @@
     <div id="modal-familia" class="modal">
       <div class="modal-content">
         <span class="close" onclick="cerrarModal('modal-familia')">&times;</span>
-        <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=600&q=80" alt="Conflictos familiares" class="modal-img">
+        <img src="./images/familia-dibujo.svg" alt="Conflictos familiares" class="modal-img">
         <h3>Conflictos familiares</h3>
         <p>
           La mediación familiar ayuda a resolver disputas entre miembros de una familia, ya sean padres e hijos, hermanos o familiares extendidos. Se busca restaurar la comunicación, comprender las necesidades de cada parte y alcanzar acuerdos que favorezcan la convivencia y el bienestar común.
         </p>
       </div>
     </div>
+
     <div id="modal-amistad" class="modal">
       <div class="modal-content">
         <span class="close" onclick="cerrarModal('modal-amistad')">&times;</span>
-        <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80" alt="Conflictos entre amistades" class="modal-img">
+        <img src="./images/amistad-dibujo.svg" alt="Conflictos entre amistades" class="modal-img">
         <h3>Conflictos entre amistades</h3>
         <p>
           Los conflictos entre amistades pueden surgir por malentendidos, diferencias de valores o situaciones puntuales. La mediación permite que ambas partes expresen sus sentimientos y expectativas, facilitando la reconciliación y el fortalecimiento del vínculo.
         </p>
       </div>
     </div>
+
     <div id="modal-pareja" class="modal">
       <div class="modal-content">
         <span class="close" onclick="cerrarModal('modal-pareja')">&times;</span>
-        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80" alt="Conflictos de pareja" class="modal-img">
+        <img src="./images/pareja-dibujo.svg" alt="Conflictos de pareja" class="modal-img">
         <h3>Conflictos de pareja</h3>
         <p>
           En la mediación de pareja se abordan desacuerdos y dificultades en la relación, promoviendo el diálogo respetuoso y la búsqueda de soluciones consensuadas. El objetivo es mejorar la comunicación y, si es posible, restaurar la armonía en la pareja.
         </p>
       </div>
     </div>
+
     <div id="modal-grupal" class="modal">
       <div class="modal-content">
         <span class="close" onclick="cerrarModal('modal-grupal')">&times;</span>
-        <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80" alt="Conflictos grupales" class="modal-img">
+        <img src="./images/grupal-dibujo.svg" alt="Conflictos grupales" class="modal-img">
         <h3>Conflictos grupales</h3>
         <p>
           La mediación grupal está orientada a resolver tensiones en equipos de trabajo, comunidades o grupos sociales. Se facilita la participación de todos los involucrados, promoviendo acuerdos que mejoren la convivencia y la colaboración.
@@ -200,10 +205,16 @@
     <!-- Diálogo del bot de IA -->
     <div id="bot-dialog-modal">
       <div id="bot-dialog-content">
-        <span class="close" id="cerrar-bot-dialog">&times;</span>
+        <div class="chat-header">
+          <div class="chat-info">
+            <div class="chat-title">Asistente de Mediación</div>
+            <div class="chat-subtitle">MEDIARIS</div>
+          </div>
+          <button id="cerrar-bot-dialog">&times;</button>
+        </div>
         <div class="bot-chat-window" id="bot-chat-window"></div>
         <form class="bot-input-row" id="bot-input-form" autocomplete="off">
-          <input type="text" id="bot-input" placeholder="Escribe tu mensaje..." autocomplete="off" />
+          <input type="text" id="bot-input" placeholder="Escribe tu mensaje aquí..." autocomplete="off" />
           <button type="submit">Enviar</button>
         </form>
       </div>
@@ -217,6 +228,7 @@
         modal.classList.add('modal-visible');
       }, 10);
     }
+    
     function cerrarModal(id) {
       const modal = document.getElementById(id);
       modal.classList.remove('modal-visible');
@@ -224,9 +236,10 @@
         modal.style.display = "none";
       }, 300);
     }
+    
     window.onclick = function(event) {
       document.querySelectorAll('.modal').forEach(function(modal){
-        if (event.target === modal) {
+        if (event.target === modal && modal.id !== 'bot-dialog-modal') {
           modal.classList.remove('modal-visible');
           setTimeout(() => {
             modal.style.display = "none";
@@ -235,51 +248,13 @@
       });
     }
 
-    // Funciones para el diálogo del bot
-    function abrirBotDialog() {
-      document.getElementById('bot-dialog-modal').style.display = 'block';
-      setTimeout(() => {
-        document.getElementById('bot-dialog-modal').classList.add('modal-visible');
-      }, 10);
-    }
-
-    function cerrarBotDialog() {
-      document.getElementById('bot-dialog-modal').classList.remove('modal-visible');
-      setTimeout(() => {
-        document.getElementById('bot-dialog-modal').style.display = 'none';
-      }, 300);
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-      var abrirBot = document.getElementById('abrir-bot-dialogo');
-      if (abrirBot) {
-        abrirBot.addEventListener('click', function(e) {
-          e.preventDefault();
-          abrirBotDialog();
-          // Reinicia el diálogo
-          document.getElementById('bot-dialog-step1').style.display = 'block';
-          document.getElementById('bot-dialog-step2').style.display = 'none';
-          document.getElementById('bot-dialog-step3').style.display = 'none';
-          document.getElementById('bot-nombre').value = '';
-          document.getElementById('bot-tema').value = '';
-        });
-      }
-
-      var abrirAclaracion = document.getElementById('abrir-aclaracion-modal');
-      if (abrirAclaracion) {
-        abrirAclaracion.addEventListener('click', function(e) {
-          e.preventDefault();
-          abrirAclaracionModal();
-        });
-      }
-    });
-
     function abrirAclaracionModal() {
       document.getElementById('aclaracion-modal').style.display = 'block';
       setTimeout(() => {
         document.getElementById('aclaracion-modal').classList.add('modal-visible');
       }, 10);
     }
+    
     function cerrarAclaracionModal() {
       document.getElementById('aclaracion-modal').classList.remove('modal-visible');
       setTimeout(() => {
@@ -303,6 +278,6 @@
     });
     </script>
     <!-- Otros scripts propios -->
-    <script src="js/bot.js"></script>
+    <script src="./js/bot.js"></script>
 </body>
 </html>
