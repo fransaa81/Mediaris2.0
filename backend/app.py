@@ -1,8 +1,8 @@
 from flask import Flask, request, jsonify
-from openai import OpenAI
 from flask_cors import CORS
 import os
 import time
+import requests
 from dotenv import load_dotenv
 
 # Construir la ruta absoluta del archivo de entorno
@@ -13,23 +13,40 @@ print("Cargando variables de entorno desde:", env_path)
 load_dotenv(env_path)
 
 # Verifica que la API key se cargue correctamente
-api_key = os.getenv('API_KEY')
-print("API_KEY:", api_key)
+API_KEY = os.getenv('API_KEY')
+print("API_KEY:", API_KEY)
 
 app = Flask(__name__)
 CORS(app)  # Permite requests desde el frontend
 
-# --- Inicialización del cliente de OpenAI ---
-try:
-    API_KEY = os.getenv('API_KEY')
-    if not API_KEY:
-        raise Exception("La variable de entorno API_KEY no está definida")
-    client = OpenAI(api_key=API_KEY)
-    print("Cliente de OpenAI inicializado correctamente")
-except Exception as e:
-    print(f"ERROR al inicializar OpenAI: {e}")
-    API_KEY = None
-    client = None
+# --- Verificación de conexión con OpenAI ---
+def verify_openai_connection():
+    try:
+        print("Verificando conexión con OpenAI...")
+        headers = {
+            'Authorization': f'Bearer {API_KEY}',
+            'Content-Type': 'application/json'
+        }
+        
+        # Test simple para verificar la API key
+        response = requests.get(
+            'https://api.openai.com/v1/models',
+            headers=headers,
+            timeout=10
+        )
+        
+        if response.status_code == 200:
+            print("✅ Conexión con OpenAI verificada correctamente")
+            return True
+        else:
+            print(f"❌ Error de conexión: {response.status_code}")
+            return False
+    except Exception as e:
+        print(f"❌ Error al verificar conexión: {e}")
+        return False
+
+# Verificar conexión al iniciar
+openai_available = verify_openai_connection()
 
 ASSISTANT_ID = "asst_9kQZSR2x7Gi2OjjxlPwMsdN2"
 
@@ -41,8 +58,8 @@ def start_assistant():
     global current_thread_id
     print("Recibida solicitud en /start_assistant")
     
-    if not client:
-        error_msg = "El cliente de OpenAI no está inicializado. Revisa el archivo api_key."
+    if not openai_available or not API_KEY:
+        error_msg = "El cliente de OpenAI no está disponible. Revisa el archivo api_key.env"
         print(f"ERROR: {error_msg}")
         return jsonify({"status": "error", "message": error_msg}), 500
 
@@ -56,49 +73,96 @@ def start_assistant():
         initial_message = f"Hola, mi nombre es {user_name}. El tema sobre el que quiero conversar es: {user_topic}."
         print(f"Mensaje inicial: {initial_message}")
 
-        # Crear nuevo thread
+        # Crear nuevo thread usando requests
         print("Creando thread...")
-        thread = client.beta.threads.create()
-        current_thread_id = thread.id  # Guardar el thread ID
-        print(f"Thread creado: {thread.id}")
+        headers = {
+            'Authorization': f'Bearer {API_KEY}',
+            'Content-Type': 'application/json',
+            'OpenAI-Beta': 'assistants=v2'
+        }
+        
+        response = requests.post(
+            'https://api.openai.com/v1/threads',
+            headers=headers,
+            json={}
+        )
+        
+        if response.status_code != 200:
+            raise Exception(f"Error creando thread: {response.text}")
+            
+        thread_data = response.json()
+        current_thread_id = thread_data['id']
+        print(f"Thread creado: {current_thread_id}")
 
         # Añadir mensaje inicial
         print("Añadiendo mensaje al thread...")
-        client.beta.threads.messages.create(
-            thread_id=thread.id,
-            role="user",
-            content=initial_message
+        response = requests.post(
+            f'https://api.openai.com/v1/threads/{current_thread_id}/messages',
+            headers=headers,
+            json={
+                'role': 'user',
+                'content': initial_message
+            }
         )
+        
+        if response.status_code != 200:
+            raise Exception(f"Error añadiendo mensaje: {response.text}")
 
         # Ejecutar asistente
         print("Ejecutando asistente...")
-        run = client.beta.threads.runs.create(
-            thread_id=thread.id,
-            assistant_id=ASSISTANT_ID,
+        response = requests.post(
+            f'https://api.openai.com/v1/threads/{current_thread_id}/runs',
+            headers=headers,
+            json={
+                'assistant_id': ASSISTANT_ID
+            }
         )
-        print(f"Run creado: {run.id}, estado: {run.status}")
+        
+        if response.status_code != 200:
+            raise Exception(f"Error ejecutando asistente: {response.text}")
+            
+        run_data = response.json()
+        run_id = run_data['id']
+        print(f"Run creado: {run_id}, estado: {run_data['status']}")
 
         # Esperar respuesta
         max_attempts = 30
         attempts = 0
         
-        while run.status in ['queued', 'in_progress'] and attempts < max_attempts:
-            print(f"Esperando... Estado: {run.status}, intento: {attempts + 1}")
+        while attempts < max_attempts:
+            print(f"Esperando... intento: {attempts + 1}")
             time.sleep(1)
-            run = client.beta.threads.runs.retrieve(
-                thread_id=thread.id,
-                run_id=run.id
+            
+            response = requests.get(
+                f'https://api.openai.com/v1/threads/{current_thread_id}/runs/{run_id}',
+                headers=headers
             )
+            
+            if response.status_code != 200:
+                raise Exception(f"Error obteniendo estado del run: {response.text}")
+                
+            run_data = response.json()
+            status = run_data['status']
+            
+            if status not in ['queued', 'in_progress']:
+                break
+                
             attempts += 1
 
-        print(f"Estado final del run: {run.status}")
+        print(f"Estado final del run: {status}")
 
-        if run.status == 'completed':
+        if status == 'completed':
             print("Obteniendo respuesta...")
-            messages = client.beta.threads.messages.list(
-                thread_id=thread.id
+            response = requests.get(
+                f'https://api.openai.com/v1/threads/{current_thread_id}/messages',
+                headers=headers
             )
-            assistant_response = messages.data[0].content[0].text.value
+            
+            if response.status_code != 200:
+                raise Exception(f"Error obteniendo mensajes: {response.text}")
+                
+            messages_data = response.json()
+            assistant_response = messages_data['data'][0]['content'][0]['text']['value']
             print(f"Respuesta del asistente: {assistant_response[:100]}...")
             
             return jsonify({
@@ -108,7 +172,7 @@ def start_assistant():
                 }
             }), 200
         else:
-            error_msg = f"La ejecución del asistente falló con el estado: {run.status}"
+            error_msg = f"La ejecución del asistente falló con el estado: {status}"
             print(f"ERROR: {error_msg}")
             return jsonify({"status": "error", "message": error_msg}), 500
 
@@ -122,7 +186,7 @@ def send_message():
     global current_thread_id
     print("Recibida solicitud en /send_message")
     
-    if not client or not current_thread_id:
+    if not openai_available or not current_thread_id:
         return jsonify({"status": "error", "message": "No hay conversación activa"}), 500
 
     try:
@@ -130,36 +194,74 @@ def send_message():
         message = data.get('message', '')
         print(f"Mensaje recibido: {message}")
 
+        headers = {
+            'Authorization': f'Bearer {API_KEY}',
+            'Content-Type': 'application/json',
+            'OpenAI-Beta': 'assistants=v2'
+        }
+
         # Añadir mensaje del usuario
-        client.beta.threads.messages.create(
-            thread_id=current_thread_id,
-            role="user",
-            content=message
+        response = requests.post(
+            f'https://api.openai.com/v1/threads/{current_thread_id}/messages',
+            headers=headers,
+            json={
+                'role': 'user',
+                'content': message
+            }
         )
+        
+        if response.status_code != 200:
+            raise Exception(f"Error añadiendo mensaje: {response.text}")
 
         # Ejecutar asistente
-        run = client.beta.threads.runs.create(
-            thread_id=current_thread_id,
-            assistant_id=ASSISTANT_ID,
+        response = requests.post(
+            f'https://api.openai.com/v1/threads/{current_thread_id}/runs',
+            headers=headers,
+            json={
+                'assistant_id': ASSISTANT_ID
+            }
         )
+        
+        if response.status_code != 200:
+            raise Exception(f"Error ejecutando asistente: {response.text}")
+            
+        run_data = response.json()
+        run_id = run_data['id']
 
         # Esperar respuesta
         max_attempts = 30
         attempts = 0
         
-        while run.status in ['queued', 'in_progress'] and attempts < max_attempts:
+        while attempts < max_attempts:
             time.sleep(1)
-            run = client.beta.threads.runs.retrieve(
-                thread_id=current_thread_id,
-                run_id=run.id
+            
+            response = requests.get(
+                f'https://api.openai.com/v1/threads/{current_thread_id}/runs/{run_id}',
+                headers=headers
             )
+            
+            if response.status_code != 200:
+                raise Exception(f"Error obteniendo estado del run: {response.text}")
+                
+            run_data = response.json()
+            status = run_data['status']
+            
+            if status not in ['queued', 'in_progress']:
+                break
+                
             attempts += 1
 
-        if run.status == 'completed':
-            messages = client.beta.threads.messages.list(
-                thread_id=current_thread_id
+        if status == 'completed':
+            response = requests.get(
+                f'https://api.openai.com/v1/threads/{current_thread_id}/messages',
+                headers=headers
             )
-            assistant_response = messages.data[0].content[0].text.value
+            
+            if response.status_code != 200:
+                raise Exception(f"Error obteniendo mensajes: {response.text}")
+                
+            messages_data = response.json()
+            assistant_response = messages_data['data'][0]['content'][0]['text']['value']
             
             return jsonify({
                 "status": "success",
@@ -168,7 +270,7 @@ def send_message():
                 }
             }), 200
         else:
-            return jsonify({"status": "error", "message": f"Error en la ejecución: {run.status}"}), 500
+            return jsonify({"status": "error", "message": f"Error en la ejecución: {status}"}), 500
 
     except Exception as e:
         print(f"Error en send_message: {str(e)}")
