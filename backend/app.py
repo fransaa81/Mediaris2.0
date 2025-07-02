@@ -56,6 +56,7 @@ current_thread_id = None
 @app.route('/start_assistant', methods=['POST'])
 def start_assistant():
     global current_thread_id
+    print("=== INICIO DE start_assistant ===")
     print("Recibida solicitud en /start_assistant")
     
     if not openai_available or not API_KEY:
@@ -67,8 +68,8 @@ def start_assistant():
         data = request.get_json()
         print(f"Datos recibidos: {data}")
         
-        user_name = data.get('userName', '')
-        user_topic = data.get('userTopic', '')
+        user_name = data.get('userName', 'Usuario')
+        user_topic = data.get('userTopic', 'consulta general')
         
         initial_message = f"Hola, mi nombre es {user_name}. El tema sobre el que quiero conversar es: {user_topic}."
         print(f"Mensaje inicial: {initial_message}")
@@ -86,6 +87,9 @@ def start_assistant():
             headers=headers,
             json={}
         )
+        
+        print(f"Respuesta crear thread - Status: {response.status_code}")
+        print(f"Respuesta crear thread - Text: {response.text}")
         
         if response.status_code != 200:
             raise Exception(f"Error creando thread: {response.text}")
@@ -105,11 +109,14 @@ def start_assistant():
             }
         )
         
+        print(f"Respuesta añadir mensaje - Status: {response.status_code}")
+        print(f"Respuesta añadir mensaje - Text: {response.text}")
+        
         if response.status_code != 200:
             raise Exception(f"Error añadiendo mensaje: {response.text}")
 
         # Ejecutar asistente
-        print("Ejecutando asistente...")
+        print(f"Ejecutando asistente con ID: {ASSISTANT_ID}")
         response = requests.post(
             f'https://api.openai.com/v1/threads/{current_thread_id}/runs',
             headers=headers,
@@ -117,6 +124,9 @@ def start_assistant():
                 'assistant_id': ASSISTANT_ID
             }
         )
+        
+        print(f"Respuesta ejecutar asistente - Status: {response.status_code}")
+        print(f"Respuesta ejecutar asistente - Text: {response.text}")
         
         if response.status_code != 200:
             raise Exception(f"Error ejecutando asistente: {response.text}")
@@ -174,11 +184,16 @@ def start_assistant():
         else:
             error_msg = f"La ejecución del asistente falló con el estado: {status}"
             print(f"ERROR: {error_msg}")
+            # Si hay más detalles del error, agregarlos
+            if 'last_error' in run_data and run_data['last_error']:
+                error_msg += f" - Detalle: {run_data['last_error']}"
             return jsonify({"status": "error", "message": error_msg}), 500
 
     except Exception as e:
         error_msg = f"Error en la API de OpenAI: {str(e)}"
         print(f"EXCEPCIÓN: {error_msg}")
+        import traceback
+        print(f"TRACEBACK: {traceback.format_exc()}")
         return jsonify({"status": "error", "message": error_msg}), 500
 
 @app.route('/send_message', methods=['POST'])
