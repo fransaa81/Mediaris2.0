@@ -1,0 +1,3 @@
+# Mantener esta carpeta en git
+# Los archivos de acuerdos (.json) se ignoran por .gitignore por seguridad
+# Esta carpeta es donde se almacenarán los acuerdos generados por el mediador

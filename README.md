@@ -1,134 +1,134 @@
-# MEDIARIS - Sistema de Mediación Digital
+# 🏛️ MEDIARIS 2.0
 
-MEDIARIS es una plataforma web que utiliza inteligencia artificial para facilitar procesos de mediación social en conflictos familiares, de pareja, entre amistades y grupales.
+**Sistema de Mediación Social con Inteligencia Artificial**
 
-## 🚀 Características
+MEDIARIS es una plataforma web que integra un asistente de IA especializado en mediación de conflictos, diseñado para ayudar a resolver disputas familiares, entre amistades y en espacios comunitarios.
 
-- **Interfaz web moderna** con diseño responsive
-- **Chatbot inteligente** powered by OpenAI GPT
-- **Diferentes tipos de mediación** para distintas situaciones
-- **Sistema backend robusto** con Flask y Python
-- **Conectores directos** a la API de OpenAI
+## 🚀 **Características**
 
-## 📋 Requisitos Previos
+- ✅ **Asistente IA con Google Gemini** - Mediador virtual profesional
+- ✅ **Interfaz web moderna** - Diseño responsivo y accesible
+- ✅ **Especialización en conflictos** - Familiares, amistad, comunitarios
+- ✅ **Proceso estructurado** - Metodología profesional de mediación
+- ✅ **100% Gratuito** - Sin costos de API (Gemini free tier)
 
-- Python 3.8 o superior
-- Una API key de OpenAI
-- Navegador web moderno
+## 🛠️ **Tecnologías**
 
-## ⚙️ Instalación y Configuración
+- **Backend**: Python + Flask + Google Gemini AI
+- **Frontend**: HTML5 + CSS3 + JavaScript
+- **IA**: Google Gemini 1.5 Flash (Gratuito)
 
-### 1. Clonar el repositorio
+## ⚡ **Instalación Rápida**
+
+### 1️⃣ **Clonar repositorio**
 ```bash
-git clone [URL_DEL_REPOSITORIO]
-cd Mediaris
+git clone [url-repositorio]
+cd "Mediaris 2.0"
 ```
 
-### 2. Configurar el Backend
-
-#### Instalar dependencias de Python:
+### 2️⃣ **Configurar Python**
 ```bash
 cd backend
 pip install -r requirements.txt
 ```
 
-#### Configurar la API Key de OpenAI:
-1. Copia el archivo de ejemplo:
-   ```bash
-   cp api_key.env.example api_key.env
-   ```
-2. Edita `backend/api_key.env` y reemplaza `TU_API_KEY_AQUI` con tu API key real:
-   ```
-   API_KEY=sk-tu-api-key-real-aqui
-   ```
-3. Obtén tu API key en: [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+### 3️⃣ **Configurar API Key**
+1. Obtén tu API key gratuita en: https://makersuite.google.com/app/apikey
+2. Edita `backend/api_key.env`:
+```env
+GEMINI_API_KEY=tu_api_key_aqui
+```
 
-#### Ejecutar el servidor backend:
+### 4️⃣ **Iniciar sistema**
 ```bash
+# Terminal 1: Backend
+cd backend
 python app.py
+
+# Terminal 2: Frontend
+# Abrir index.html en navegador
 ```
 
-Deberías ver:
-```
-✅ Conexión con OpenAI verificada correctamente
-* Running on http://127.0.0.1:5000
-```
+## 🎯 **Uso**
 
-### 3. Ejecutar el Frontend
+1. **Abrir** `index.html` en tu navegador
+2. **Hacer clic** en "Iniciar conversación"
+3. **Chatear** con el mediador virtual
+4. **Seguir** las recomendaciones del asistente
 
-1. Abre `index.html` en tu navegador web
-2. O usa un servidor web local como Live Server (extensión de VS Code)
-
-## 🎯 Uso del Sistema
-
-1. **Navegar por la web:** Explora las secciones de Servicios, Nosotros y Contacto
-2. **Usar el Chatbot:** Haz clic en "Iniciar conversación"
-3. **Interactuar:** El asistente te guiará a través del proceso de mediación
-
-## 🔧 Solución de Problemas
-
-### Error: "Failed to fetch"
-- **Causa:** El servidor backend no está ejecutándose
-- **Solución:** Ejecuta `python app.py` en la carpeta backend
-
-### Error: "El cliente de OpenAI no está disponible"
-- **Causa:** La API key no está configurada correctamente
-- **Solución:** Verifica el archivo `api_key.env` con tu API key real
-
-### Error: "No hay conversación activa"
-- **Causa:** El thread de conversación se perdió
-- **Solución:** Cierra y vuelve a abrir el chatbot
-
-## 📁 Estructura del Proyecto
+## 📁 **Estructura del Proyecto**
 
 ```
-Mediaris/
-├── index.html              # Página principal
-├── css/
-│   └── styles.css          # Estilos del sitio
-├── js/
-│   └── bot.js             # Lógica del chatbot
-├── img/
-│   └── imagen-mediaris.png # Recursos gráficos
+Mediaris 2.0/
 ├── backend/
-│   ├── app.py             # Servidor Flask
-│   ├── requirements.txt   # Dependencias Python
-│   ├── api_key.env        # Configuración API key (NO SUBIR A GIT)
-│   └── api_key.env.example # Ejemplo de configuración
-├── setup.bat              # Script de configuración automática
-└── README.md              # Este archivo
+│   ├── app.py              # Servidor Flask principal
+│   ├── api_key.env         # Configuración API Gemini
+│   ├── requirements.txt    # Dependencias Python
+│   └── acuerdos/          # Almacén de acuerdos
+├── css/
+│   └── styles.css         # Estilos principales
+├── js/
+│   └── bot.js             # Cliente JavaScript
+├── img/
+│   └── imagen-mediaris.png
+├── index.html             # Página principal
+└── README.md              # Esta documentación
 ```
 
-## 🔒 Seguridad
+## 🔧 **API Endpoints**
 
-- ⚠️ **IMPORTANTE:** Nunca subas tu archivo `api_key.env` al repositorio
-- 🔐 Tu API key es confidencial y tiene costos asociados
-- 📝 El archivo `api_key.env` está incluido en `.gitignore`
+- `POST /start_assistant` - Iniciar conversación
+- `POST /send_message` - Enviar mensaje
+- `POST /reset_conversation` - Reiniciar conversación
+- `GET /health` - Estado del servidor
 
-## 💡 Notas Importantes
+## 🧪 **Pruebas**
 
-- **Costos:** Usar la API de OpenAI tiene costos asociados
-- **Desarrollo:** Para desarrollo, puedes usar `debug=True` en Flask
-- **Producción:** Para producción, cambia las configuraciones de seguridad
-- **Limitaciones:** Esta plataforma es para mediación social, no reemplaza servicios profesionales
+### Verificar backend:
+```bash
+curl http://127.0.0.1:5000/health
+```
 
-## 🚀 Despliegue
+### Verificar frontend:
+1. Abrir navegador en `index.html`
+2. Probar chat del mediador
 
-Para desplegar en producción:
+## 🔐 **Seguridad**
 
-1. Configura variables de entorno en tu servidor
-2. Usa un servidor WSGI como Gunicorn
-3. Configura HTTPS
-4. Ajusta la configuración de CORS según sea necesario
+- ✅ API key protegida en `.env`
+- ✅ CORS configurado correctamente
+- ✅ Validación de entrada en endpoints
+- ✅ `.gitignore` protege información sensible
 
-## 📞 Contacto y Soporte
+## 🚨 **Solución de Problemas**
 
-Si tienes problemas con la configuración:
-1. Verifica que todas las dependencias estén instaladas
-2. Confirma que la API key sea válida
-3. Revisa que no haya otros servicios usando el puerto 5000
-4. Consulta los mensajes de error en la consola del navegador (F12)
+### Backend no inicia:
+```bash
+pip install -r requirements.txt
+```
+
+### Chat no responde:
+1. Verificar API key en `api_key.env`
+2. Comprobar que el backend esté en puerto 5000
+3. Revisar consola del navegador (F12)
+
+### Error 500:
+- Verificar conexión a internet
+- Comprobar validez de la API key de Gemini
+
+## 📞 **Soporte**
+
+Para problemas técnicos:
+1. Revisar logs del servidor Flask
+2. Comprobar consola del navegador
+3. Verificar configuración de API key
+
+## 📝 **Licencia**
+
+Proyecto de código abierto para mediación social.
 
 ---
 
-© 2025 Mediaris. Todos los derechos reservados.
+**✅ SISTEMA COMPLETAMENTE FUNCIONAL CON GOOGLE GEMINI**
+
+*Última actualización: Julio 2025*

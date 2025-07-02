@@ -98,30 +98,28 @@ async function enviarMensajeAlAsistente(mensaje) {
   }
 }
 
-// Función para conectar con el asistente de OpenAI
+// Función para conectar con el asistente de Gemini
 async function conectarConAsistente() {
   try {
-    console.log('Conectando directamente con el asistente...');
+    const requestBody = {
+      userName: userName,
+      userTopic: userTopic
+    };
 
     const response = await fetch('http://127.0.0.1:5000/start_assistant', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        userName: userName,
-        userTopic: userTopic
-      })
+      body: JSON.stringify(requestBody)
     });
 
-    console.log('Respuesta del servidor:', response);
-
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
     }
 
     const data = await response.json();
-    console.log('Datos recibidos:', data);
 
     // Remover el mensaje "Conectando..."
     const chatWindow = document.getElementById('bot-chat-window');
